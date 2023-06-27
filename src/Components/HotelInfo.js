@@ -1,8 +1,28 @@
-import React from "react";
-import services from "./data/services.json";
-import accessibility from "./data/accessibility.json";
+import React, { useState, useEffect } from "react";
 
 export function HotelInfo() {
+
+    const [servicesData, setServicesData] = useState([]);
+    const [accessibilitiesData, setAccessibilitiesData] = useState([]);
+
+
+    async function loadServicesData() {
+      const response = await fetch('https://aim48ho1qg.execute-api.us-east-2.amazonaws.com/Production/services');
+      let jsonData = await response.json();
+      setServicesData(jsonData);
+    }
+
+    async function loadAccessibilityData() {
+      const response = await fetch('https://aim48ho1qg.execute-api.us-east-2.amazonaws.com/Production/accessibilities');
+      let jsonData = await response.json();
+      setAccessibilitiesData(jsonData);
+    }
+
+    useEffect(() => {
+      loadServicesData();
+      loadAccessibilityData();
+    }, []); 
+
     return (
         <div className="scene" id="hotelinfo">
             <article className="heading">
@@ -24,7 +44,7 @@ export function HotelInfo() {
                 <h2>Services and Amenities</h2>
                 <p>Our services and amenities are designed to make your travel easy, your stay comfortable, and your experience one-of-a-kind.</p>
                 <ul>
-                    {services.map((text) => 
+                    {servicesData.map((text) => 
                         <li>{text.name}</li>
                     )}
                 </ul>
@@ -33,7 +53,7 @@ export function HotelInfo() {
                 <h2>Accessibility</h2>
                 <p>We're committed to maintaining the same quality of service for every individual. We offer the following facilities for those with special needs:</p>
                 <ul>
-                    {accessibility.map((text) => 
+                    {accessibilitiesData.map((text) => 
                     <li>{text.name}</li>                    
                     )}
                 </ul>

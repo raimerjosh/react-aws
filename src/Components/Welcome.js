@@ -1,14 +1,26 @@
-import React from "react";
-import welcomeIMGData from "./data/gallery_img.json";
+import React, { useState, useEffect } from "react";
 
 
 export function Welcome() {
+
+    const [IMGData, setIMGData] = useState([]);
+
+    async function loadIMGData() {
+        const response = await fetch('https://aim48ho1qg.execute-api.us-east-2.amazonaws.com/Production/gallery-images');
+        let jsonData = await response.json();
+        setIMGData(jsonData);
+      }
+  
+      useEffect(() => {
+        loadIMGData();
+      }, []); 
+
     return (
         <div className="scene" id="welcome">
             <article className="content">
                 <div className="gallery">
                     {
-                        welcomeIMGData.map((image) => 
+                        IMGData.map((image) => 
                             <img 
                                 className={image.className}
                                 src={image.src} 
